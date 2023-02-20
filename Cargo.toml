@@ -1,0 +1,15 @@
+cargo-features = ["profile-rustflags"]
+
+[package]
+name = "yachip_8"
+version = "0.1.0"
+edition = "2021"
+description = "yet another chip-8 interpreter/emulator"
+
+[dependencies]
+sdl2 = "0.35.2"
+rand = "0.8.5"
+
+[profile.dev]
+debug = true
+rustflags = ["-C", "target-cpu=native",  "-Z", "tune-cpu=native"]
