@@ -297,14 +297,26 @@ impl CPU{
         self.program_counter += 2;
     }
 
-    fn wait_for_key_press(&mut self, opcode: u16, input: &mut Input){
+    fn wait_for_key_press(&mut self, opcode: u16, input: &mut Input) {
         let register = ((opcode & 0x0F00) >> 8) as usize;
-        let key = self.registers[register];
-        if key <= 15 {
-            input.get_keys()[key as usize] = 0;
+        let mut key_pressed = false;
+        let mut key_value = 0;
+
+        while !key_pressed {
+            let keys = input.get_keys();
+            for i in 0..keys.len() {
+                if keys[i] == 1 {
+                    key_pressed = true;
+                    key_value = i as u8;
+                    break;
+                }
+            }
         }
+
+        self.registers[register] = key_value;
         self.program_counter += 2;
     }
+
 
    fn set_delay_timer_register(&mut self, opcode: u16, timer: &mut Timer){
         let register = ((opcode & 0x0F00) >> 8) as usize;
